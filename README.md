@@ -1,3 +1,1 @@
-IT IS IN PROGRESS   ||    
-BACKEND DEVELOPED     ||     
-FRONTEND IN PROGRESS
+Completed
