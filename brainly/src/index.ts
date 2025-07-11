@@ -1,14 +1,17 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import { ContentModel, UserModel, LinkModel} from "./db";
-import { JWT_PASSWORD } from "./config";
 import { userMiddleware } from "./middleware";
-import { random } from "./utils"
+import { random } from "./utils";
+import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 
+const JWT_PASSWORD = process.env.JWT_PASSWORD!;
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 
 // TO SIGNUP 
 app.post("/api/v1/signup" , async (req,res)=>{
@@ -63,9 +66,12 @@ app.post("/api/v1/signin" , async (req,res)=>{
 app.post("/api/v1/content" , userMiddleware , async (req,res)=> {
     const link = req.body.link;
     const type = req.body.type;
+    const title = req.body.title;
+    
     await ContentModel.create({
         link, 
         type,
+        title,
         //@ts-ignore
         userId : req.userId,
         tags : []
@@ -90,7 +96,7 @@ app.get("/api/v1/content" ,userMiddleware, async (req,res)=>{
     // Since we specified "username", only the username will be included in the result, 
     // and other details like password won’t be fetched.
 
-     const content =await ContentModel.findOne({
+     const content =await ContentModel.find({
         userId : userId
     }).populate("userId" , "username")                         
     res.json({                                                 
@@ -104,8 +110,8 @@ app.delete("/api/v1/content" ,userMiddleware, async (req,res)=>{
 
     const contentId = req.body.contentId;
 
-    await ContentModel.deleteMany({
-        contentId ,
+    await ContentModel.deleteOne({
+        _id: contentId,
         //@ts-ignore
         userId : req.userId
     })
@@ -195,3 +201,5 @@ app.get("/api/v1/brain/:shareLink" , async (req,res)=>{
 })
 
 app.listen(3000);
+
+

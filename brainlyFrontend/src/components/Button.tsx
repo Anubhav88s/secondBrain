@@ -1,34 +1,35 @@
-import { type ReactElement } from 'react'
+import { type ReactElement } from 'react';
 
-type varients = "primary" | "secondary"
+type varients = "primary" | "secondary";
 
-interface Buttonprops { 
-    varient : varients;
-    size  : "sm" | "md" | "lg";
-    text : String;
-    startIcon ? : ReactElement;
-    endIcon ? : ReactElement;
-    onClick ? : () => void;
+interface Buttonprops {
+  varient: varients;
+  text: String;
+  startIcon?: ReactElement;
+  onClick?: () => void;
+  fullWidth?: boolean;
+  loading?: boolean;
 }
 
 const varientStyles = {
-    "primary" : "bg-purple-600 text-white",
-    "secondary" : "bg-purple-400 text-purple-600"
-} 
+  primary: "bg-purple-600 text-white hover:bg-purple-700 active:bg-purple-800 ",
+  secondary: "bg-purple-100 text-purple-700 hover:bg-purple-200 active:bg-purple-300 "
+};
 
-const defaultStyle = " p-4 flex item-centre"
+const defaultStyle =
+  "px-5 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm";
 
-const sizeStyle = {
-  "sm" : "py-1 px-2 text-sm rounded-md",
-  "md" : "py-2 px-4 text-md rounded-md",
-  "lg" : "py-4 px-6 text-lg rounded-lg",
-}
-
-export const Button = (props : Buttonprops) => {
+export const Button = (props: Buttonprops) => {
   return (
-    <button className ={`${varientStyles[props.varient]} ${defaultStyle} ${sizeStyle[props.size]}`}>
-        {props.startIcon ? <div className = 'pr-2'>{props.startIcon}</div> : null}{props.text}{props.endIcon}
+    <button
+      onClick={props.onClick}
+      className={`${varientStyles[props.varient]} ${defaultStyle} ${
+        props.fullWidth ? "w-full flex justify-center items-center" : ""
+      } ${props.loading ? "opacity-50" : "cursor-pointer"}`}
+      disabled={props.loading}
+    >
+      {props.startIcon ? <div className="pr-2">{props.startIcon}</div> : null}
+      {props.text}
     </button>
-  )
-}
-
+  );
+};

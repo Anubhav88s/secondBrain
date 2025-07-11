@@ -1,7 +1,10 @@
 import {model, Schema} from "mongoose";
 import mongoose from "mongoose";
-//enter you mongodb url here
-mongoose.connect(" ");  
+import dotenv from "dotenv";
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URL!)
+
 
 const UserSchema = new Schema ({
     username :{type: String , unique: true},
@@ -11,6 +14,7 @@ const UserSchema = new Schema ({
 export const UserModel = model("User" , UserSchema);
 
 const ContentSchema = new Schema ({
+    title: String ,
     type : String ,
     link : String , 
 
